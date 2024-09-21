@@ -8,17 +8,21 @@ import { UserModule } from './user/user.module';
 import entities from './database';
 import { JwtModule } from '@nestjs/jwt';
 import { authConfig } from './config/auth.configs';
+import { RolesModule } from './roles/roles.module';
+import { StripeModule } from './stripe/stripe.module';
+import { PriceModule } from './price/price.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
    imports: [
       ConfigModule.forRoot({ isGlobal: true }),
       TypeOrmModule.forRoot({
-         type: 'mysql',
+         type: 'postgres',
          host: process.env.DB_HOST,
          port: parseInt(process.env.DB_PORT),
          username: process.env.DB_USERNAME,
          password: process.env.DB_PASSWORD,
-         database: 'nest_learn',
+         database: 'nest-auth-learn',
          entities: entities,
          synchronize: true,
       }),
@@ -29,6 +33,10 @@ import { authConfig } from './config/auth.configs';
       }),
       AuthModule,
       UserModule,
+      RolesModule,
+      StripeModule,
+      PriceModule,
+      ProductModule,
    ],
    controllers: [AppController],
    providers: [AppService],

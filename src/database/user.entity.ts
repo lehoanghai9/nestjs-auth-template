@@ -19,6 +19,9 @@ export class UserEntity extends BaseEntity {
    @Column()
    password: string;
 
+   @Column({name: "stripe_customer_id", nullable: true})
+   stripeCustomerId: string;
+
    @OneToMany(() => RefreshTokenEntity, (refreshToken) => refreshToken.user, {onDelete: 'CASCADE'}) 
    refreshTokens: RefreshTokenEntity[];
 
