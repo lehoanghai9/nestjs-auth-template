@@ -12,6 +12,7 @@ import { RolesModule } from './roles/roles.module';
 import { StripeModule } from './stripe/stripe.module';
 import { PriceModule } from './price/price.module';
 import { ProductModule } from './product/product.module';
+import { WebhookModule } from './webhook/webhook.module';
 
 @Module({
    imports: [
@@ -37,6 +38,7 @@ import { ProductModule } from './product/product.module';
       StripeModule,
       PriceModule,
       ProductModule,
+      WebhookModule,
    ],
    controllers: [AppController],
    providers: [AppService],

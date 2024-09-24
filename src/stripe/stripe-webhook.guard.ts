@@ -11,7 +11,7 @@ import { StripeService } from './stripe.service';
 @Injectable()
 export class StripeWebhookGuard implements CanActivate {
    private readonly stripeSignatureHeader = 'stripe-signature';
-   private readonly logger = new Logger('StripeWebhookGuard');
+   private readonly logger = new Logger('<>StripeWebhookGuard<>');
 
    constructor(private readonly stripeService: StripeService) {}
 

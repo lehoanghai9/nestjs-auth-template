@@ -12,7 +12,7 @@ type CustomerDetails = {
 @Injectable()
 export class StripeService {
    private readonly stripe: Stripe;
-   private readonly logger = new Logger('StripeService');
+   private readonly logger = new Logger('<>StripeService<>');
    private readonly stripeWebhookSecret: string;
 
    constructor(private readonly configService: ConfigService) {
@@ -28,6 +28,7 @@ export class StripeService {
       this.stripe = new Stripe(stripeSecretKey, {
          apiVersion: '2024-06-20',
       });
+
    }
 
    validateWebhookSignature(payload: Buffer, signature: string | string[]) {

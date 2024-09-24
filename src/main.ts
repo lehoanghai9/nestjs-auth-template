@@ -15,7 +15,7 @@ async function bootstrap() {
 
 
    // Add the raw body parser to the Stripe webhook route
-   app.use('/api/stripe/webhook', raw({type: 'application/json'}));
+   app.use('/api/webhook/stripe', raw({type: 'application/json'}));
 
    await app.listen(8000);
 }

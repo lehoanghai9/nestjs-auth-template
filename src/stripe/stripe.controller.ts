@@ -1,15 +1,13 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { StripeService } from './stripe.service';
+import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
 import { StripeWebhookGuard } from './stripe-webhook.guard';
-import { bufferToJson } from './utils';
 
 @Controller('stripe')
 export class StripeController {
-   constructor(private readonly stripeService: StripeService) {}
+   constructor(
+   ) {}
 
    @Post('webhook')
    @UseGuards(StripeWebhookGuard)
    async handleWebhook(@Body() payload: any) {
-      console.log(bufferToJson(payload));
    }
 }

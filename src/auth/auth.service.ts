@@ -6,16 +6,16 @@ import {
    UnauthorizedException,
 } from '@nestjs/common';
 import { SignupDto } from './dtos/signup.dto';
-import { comparePasswords, encodePassword } from 'src/utils/bcrypt';
+import { comparePasswords, encodePassword } from 'src/common/utils/bcrypt';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dtos/login.dto';
-import { WrongCredentialsException } from 'src/utils/exceptions/wrong-credentials.exception';
+import { WrongCredentialsException } from 'src/common/utils/exceptions/wrong-credentials.exception';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshTokenEntity } from 'src/database/refresh-token.entity';
 import { MoreThanOrEqual, Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { JWTPayload } from 'src/types/userdetail-request.type';
+import { JWTPayload } from 'src/common/types/userdetail-request.type';
 import { nanoid } from 'nanoid';
 import { ResetTokenEntity } from 'src/database/reset-token.entity';
 import { authConfig } from 'src/config/auth.configs';

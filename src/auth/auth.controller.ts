@@ -4,8 +4,8 @@ import { SignupDto } from './dtos/signup.dto';
 import { LoginDto } from './dtos/login.dto';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { ChangePasswordDto } from './dtos/change-password.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { UserDetailRequest } from 'src/types/userdetail-request.type';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { UserDetailRequest } from 'src/common/types/userdetail-request.type';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 
