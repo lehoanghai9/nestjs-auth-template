@@ -32,7 +32,13 @@ export class PriceEntity {
    description?: string;
 
    // The unit amount as a positive integer in the smallest currency unit (e.g., 100 cents for US$1.00 or 100 for ¥100, a zero-decimal currency).
-   @Column('bigint', { nullable: true })
+   @Column('bigint', {
+      nullable: true,
+      transformer: {
+         from: (value) => Number(value),
+         to: (value) => Number(value),
+      },
+   })
    unit_amount: number;
 
    // Three-letter ISO currency code, in lowercase.
