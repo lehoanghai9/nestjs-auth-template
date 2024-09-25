@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+   BadRequestException,
+   Inject,
+   Injectable,
+   Logger,
+} from '@nestjs/common';
 import { ProductService } from 'src/product/product.service';
 import Stripe from 'stripe';
 import { stripeRelevantEvents } from './config';
@@ -11,7 +16,9 @@ import { PriceService } from 'src/price/price.service';
 export class WebhookService {
    private readonly logger = new Logger('<>WebhookService<>');
    constructor(
+      @Inject('PRODUCT_SERVICE')
       private readonly productService: ProductService,
+      @Inject('PRICE_SERVICE')
       private readonly priceService: PriceService,
    ) {}
 
@@ -27,7 +34,10 @@ export class WebhookService {
          await this.processEvent(event);
          this.logger.log(`Successfully processed event: ${event.type}`);
       } catch (error) {
-         this.logger.error(`Error processing event: ${event.type}`, error.stack);
+         this.logger.error(
+            `Error processing event: ${event.type}`,
+            error.stack,
+         );
          throw new BadRequestException(
             'Webhook handler failed. View your function logs.',
          );
@@ -43,19 +53,35 @@ export class WebhookService {
          case 'product.created':
          case 'product.updated':
             this.logger.log(`Handling product event: ${event.type}`);
-            await this.handleProductEvent(event.data.object as Stripe.Product);
+            await this.handleStripeProductEvent(
+               event.data.object as Stripe.Product,
+            );
             break;
          case 'price.created':
          case 'price.updated':
             this.logger.log(`Handling price event: ${event.type}`);
-            await this.handlePriceEvent(event.data.object as Stripe.Price);
+            await this.handleStripePriceEvent(
+               event.data.object as Stripe.Price,
+            );
+            break;
+         case 'price.deleted':
+            this.logger.log(`Handling price event deletion: ${event.type}`);
+            await this.deleteStripePriceEvent(
+               event.data.object as Stripe.Price,
+            );
+            break;
+         case 'product.deleted':
+            this.logger.log(`Handling product event deletion: ${event.type}`);
+            await this.deleteStripeProductEvent(
+               event.data.object as Stripe.Product,
+            );
             break;
          default:
             this.logger.warn(`Unhandled event type: ${event.type}`);
       }
    }
 
-   private async handleProductEvent(stripeProduct: Stripe.Product) {
+   private async handleStripeProductEvent(stripeProduct: Stripe.Product) {
       this.logger.log(`Handling product: ${stripeProduct.id}`);
 
       const productData: ProductDto = {
@@ -72,7 +98,7 @@ export class WebhookService {
       this.logger.log(`Product upserted: ${stripeProduct.id}`);
    }
 
-   private async handlePriceEvent(stripePrice: Stripe.Price) {
+   private async handleStripePriceEvent(stripePrice: Stripe.Price) {
       this.logger.log(`Handling price: ${stripePrice.id}`);
 
       const pricing =
@@ -105,5 +131,17 @@ export class WebhookService {
       this.logger.debug(`Upserting price: ${JSON.stringify(priceData)}`);
       await this.priceService.upsertPrice(priceData);
       this.logger.log(`Price upserted: ${stripePrice.id}`);
+   }
+
+   private async deleteStripePriceEvent(stripePrice: Stripe.Price) {
+      this.logger.log(`Deleting price: ${stripePrice.id}`);
+      await this.priceService.deletePrice(stripePrice.id);
+      this.logger.log(`Price deleted: ${stripePrice.id}`);
+   }
+
+   private async deleteStripeProductEvent(stripeProduct: Stripe.Product) {
+      this.logger.log(`Deleting product: ${stripeProduct.id}`);
+      await this.productService.deleteProduct(stripeProduct.id);
+      this.logger.log(`Product deleted: ${stripeProduct.id}`);
    }
 }

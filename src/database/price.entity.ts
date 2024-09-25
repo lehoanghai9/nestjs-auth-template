@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { ProductEntity } from './product.entity';
 
 /**
@@ -68,5 +68,6 @@ export class PriceEntity {
    metadata?: Record<string, any>;
 
    @ManyToOne(() => ProductEntity, (product) => product.prices, {})
+   @JoinColumn({ name: 'product_id' })
    product: ProductEntity;
 }

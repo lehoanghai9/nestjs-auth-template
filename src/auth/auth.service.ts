@@ -9,7 +9,7 @@ import { SignupDto } from './dtos/signup.dto';
 import { comparePasswords, encodePassword } from 'src/common/utils/bcrypt';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dtos/login.dto';
-import { WrongCredentialsException } from 'src/common/utils/exceptions/wrong-credentials.exception';
+import { WrongCredentialsException } from 'src/common/exceptions/wrong-credentials.exception';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshTokenEntity } from 'src/database/refresh-token.entity';

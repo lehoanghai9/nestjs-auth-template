@@ -27,8 +27,14 @@ export class ProductService {
 
       await this.productRepository.upsert(productData, {
          conflictPaths: ['id'],
+         skipUpdateIfNoValuesChanged: true,
       });
 
       this.logger.log(`Product ${product.id} upserted`);
+   }
+
+   async deleteProduct(productId: string) {
+      this.logger.log(`Deleting product ${productId}`);
+      return await this.productRepository.delete(productId);
    }
 }

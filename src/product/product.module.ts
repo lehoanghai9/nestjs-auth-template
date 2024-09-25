@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
-import { StripeService } from 'src/stripe/stripe.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity } from 'src/database/product.entity';
 
@@ -9,8 +8,11 @@ import { ProductEntity } from 'src/database/product.entity';
    imports: [TypeOrmModule.forFeature([ProductEntity])],
    controllers: [ProductController],
    providers: [
-      ProductService,
+      {
+         useClass: ProductService,
+         provide: 'PRODUCT_SERVICE',
+      },
    ],
-   exports: [ProductService],
+   exports: ['PRODUCT_SERVICE'],
 })
 export class ProductModule {}

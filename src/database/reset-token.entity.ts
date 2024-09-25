@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { BaseEntity } from './base.entity';
 
@@ -14,5 +14,6 @@ export class ResetTokenEntity extends BaseEntity {
    expiryDate: Date;
 
    @ManyToOne(() => UserEntity, (user) => user.resetTokens)
+   @JoinColumn({ name: 'user_id' })
    user: UserEntity;
 }

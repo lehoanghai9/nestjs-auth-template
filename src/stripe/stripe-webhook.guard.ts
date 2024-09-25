@@ -1,6 +1,7 @@
 import {
    CanActivate,
    ExecutionContext,
+   Inject,
    Injectable,
    Logger,
    UnauthorizedException,
@@ -13,7 +14,9 @@ export class StripeWebhookGuard implements CanActivate {
    private readonly stripeSignatureHeader = 'stripe-signature';
    private readonly logger = new Logger('<>StripeWebhookGuard<>');
 
-   constructor(private readonly stripeService: StripeService) {}
+   constructor(
+      @Inject('STRIPE_SERVICE') private readonly stripeService: StripeService,
+   ) {}
 
    canActivate(context: ExecutionContext): boolean {
       const request: Request = context.switchToHttp().getRequest();

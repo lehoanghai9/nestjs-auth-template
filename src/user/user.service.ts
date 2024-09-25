@@ -17,7 +17,7 @@ export class UserService {
    }
 
    async findOneById(id: string): Promise<UserEntity> {
-      return this.userRepository.findOne({ where: { id } });
+      return this.userRepository.findOne({ where: { id }, relations: ['customer'] });
    }
 
    async findOneByEmail(email: string): Promise<UserEntity> {

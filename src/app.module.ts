@@ -13,6 +13,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { PriceModule } from './price/price.module';
 import { ProductModule } from './product/product.module';
 import { WebhookModule } from './webhook/webhook.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
    imports: [
@@ -39,6 +40,7 @@ import { WebhookModule } from './webhook/webhook.module';
       PriceModule,
       ProductModule,
       WebhookModule,
+      CustomerModule,
    ],
    controllers: [AppController],
    providers: [AppService],
