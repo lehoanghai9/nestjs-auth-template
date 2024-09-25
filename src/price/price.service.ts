@@ -54,10 +54,19 @@ export class PriceService {
       const stripeCustomerId =
          await this.customerService.createOrUpdateUserStripeCustomerId(userId);
 
+      this.logger.log('Finding DB price: ' + priceId);
+      const DBprice = await this.findPrice(priceId);
+
+      if (!DBprice) {
+         this.logger.error('Price not found');
+         throw new BadRequestException('Price not found');
+      }
+
       const checkoutSession = await this.stripeService.createCheckoutSession(
          priceId,
          quantity,
          stripeCustomerId,
+         DBprice.trial_period_days ?? 0,
       );
 
       return {

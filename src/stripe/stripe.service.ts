@@ -42,9 +42,11 @@ export class StripeService {
          );
          return event;
       } catch (error) {
-         this.logger.error('Webhook signature validation failed');
-         this.logger.error('Error: ', error);
-         throw new Error('Webhook signature validation failed');
+         this.logger.warn('Webhook signature validation failed');
+         throw new StripeException(
+            error,
+            'Webhook signature validation failed',
+         );
       }
    }
 
@@ -125,6 +127,7 @@ export class StripeService {
       stripePriceId: string,
       quantity: number,
       stripeCustomerId?: string,
+      trialPeriodDays: number = 0,
    ) {
       this.logger.log(
          `Initiating checkout session creation with price: ${stripePriceId}, customer: ${stripeCustomerId}`,
@@ -135,7 +138,7 @@ export class StripeService {
       let params: Stripe.Checkout.SessionCreateParams = {
          allow_promotion_codes: true,
          billing_address_collection: 'required',
-         locale: "hu",
+         locale: 'hu',
          customer: stripeCustomerId,
          customer_update: {
             address: 'auto',
@@ -143,14 +146,14 @@ export class StripeService {
          line_items: [
             {
                price: price.id,
-               quantity: quantity, //TODO: This can be changed to allow for multiple quantities
+               quantity: 1, //TODO: This can be changed to allow for multiple quantities
             },
          ],
          cancel_url: StripeConfig.defaultCancelUrl,
          success_url: StripeConfig.defaultSuccessUrl,
       };
 
-      const trialPeriodDays = price.recurring.trial_period_days;
+      console.log(trialPeriodDays);
 
       if (trialPeriodDays > 0) {
          this.logger.log(
@@ -174,9 +177,9 @@ export class StripeService {
       }
 
       try {
-         this.logger.log(
-            'Creating checkout session with parameters: ',
-            JSON.stringify(params),
+         this.logger.debug(
+            'Creating checkout session with parameters: ' +
+               JSON.stringify(params),
          );
          const session = await this.stripe.checkout.sessions.create(params);
          this.logger.log(`Checkout session created with ID: ${session.id}`);
