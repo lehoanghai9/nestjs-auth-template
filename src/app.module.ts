@@ -14,6 +14,7 @@ import { PriceModule } from './price/price.module';
 import { ProductModule } from './product/product.module';
 import { WebhookModule } from './webhook/webhook.module';
 import { CustomerModule } from './customer/customer.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
    imports: [
@@ -41,6 +42,7 @@ import { CustomerModule } from './customer/customer.module';
       ProductModule,
       WebhookModule,
       CustomerModule,
+      SubscriptionModule,
    ],
    controllers: [AppController],
    providers: [AppService],

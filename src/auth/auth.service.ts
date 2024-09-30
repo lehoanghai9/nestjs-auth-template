@@ -6,7 +6,7 @@ import {
    UnauthorizedException,
 } from '@nestjs/common';
 import { SignupDto } from './dtos/signup.dto';
-import { comparePasswords, encodePassword } from 'src/common/utils/bcrypt';
+import { comparePasswords } from 'src/common/utils/bcrypt';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dtos/login.dto';
 import { WrongCredentialsException } from 'src/common/exceptions/wrong-credentials.exception';
@@ -44,13 +44,10 @@ export class AuthService {
          throw new BadRequestException('Email already in use');
       }
 
-      //Hash the password
-      const hashedPassword = await encodePassword(password);
-
       //Create the user
       const user = await this.userService.createUser({
          ...signupData,
-         password: hashedPassword,
+         password: signupData.password,
       });
 
       return {
@@ -125,11 +122,8 @@ export class AuthService {
          throw new WrongCredentialsException();
       }
 
-      //Hash the new password
-      const hashedPassword = await encodePassword(newPassword);
-
       //Update the user password
-      await this.userService.updatePassword(user.id, hashedPassword);
+      await this.userService.updatePassword(user.id, newPassword);
 
       return {
          message: 'Password updated successfully',
@@ -177,11 +171,8 @@ export class AuthService {
          throw new UnauthorizedException('Invalid reset token');
       }
 
-      //Hash the new password
-      const hashedPassword = await encodePassword(newPassword);
-
       //Update the user password
-      await this.userService.updatePassword(resetToken.user.id, hashedPassword);
+      await this.userService.updatePassword(resetToken.user.id, newPassword);
 
       //Delete the reset token
       await this.resetTokenRepository.delete({ token });
