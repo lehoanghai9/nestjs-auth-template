@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { IsPassword } from 'src/common/decorators/ispassword.decorator';
+import { IsPassword } from '../../common/decorators/ispassword.decorator'; 
 
 export class ChangePasswordDto {
    @IsString()

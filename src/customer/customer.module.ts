@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CustomerController } from './customer.controller';
-import { UserModule } from 'src/user/user.module';
-import { StripeModule } from 'src/stripe/stripe.module';
+import { UserModule } from '../user/user.module';
+import { StripeModule } from '../stripe/stripe.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomerEntity } from 'src/database/customer.entity';
+import { CustomerEntity } from '../database/customer.entity';
 
 @Module({
    imports: [

@@ -5,7 +5,7 @@ import {
    Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductEntity } from 'src/database/product.entity';
+import { ProductEntity } from '../database/product.entity';
 import { Repository } from 'typeorm';
 import { ProductDto } from './dtos/product.dto';
 

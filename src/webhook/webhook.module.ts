@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { WebhookController } from './webhook.controller';
-import { ProductModule } from 'src/product/product.module';
-import { StripeModule } from 'src/stripe/stripe.module';
-import { PriceModule } from 'src/price/price.module';
+import { ProductModule } from '../product/product.module';
+import { StripeModule } from '../stripe/stripe.module';
+import { PriceModule } from '../price/price.module';
 
 @Module({
   imports: [ProductModule, StripeModule, PriceModule],

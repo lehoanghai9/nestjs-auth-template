@@ -5,9 +5,9 @@ import {
    Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerEntity } from 'src/database/customer.entity';
-import { StripeService } from 'src/stripe/stripe.service';
-import { UserService } from 'src/user/user.service';
+import { CustomerEntity } from '../database/customer.entity';
+import { StripeService } from '../stripe/stripe.service';
+import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 
 @Injectable()

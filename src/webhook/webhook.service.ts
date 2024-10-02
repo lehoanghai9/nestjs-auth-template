@@ -4,13 +4,13 @@ import {
    Injectable,
    Logger,
 } from '@nestjs/common';
-import { ProductService } from 'src/product/product.service';
+import { ProductService } from '../product/product.service';
 import Stripe from 'stripe';
 import { stripeRelevantEvents } from './config';
-import { ProductDto } from 'src/product/dtos/product.dto';
-import { PriceDto } from 'src/price/dtos/price.dto';
-import { PricingPlanInterval, PricingType } from 'src/database/price.entity';
-import { PriceService } from 'src/price/price.service';
+import { ProductDto } from '../product/dtos/product.dto';
+import { PriceDto } from '../price/dtos/price.dto';
+import { PricingPlanInterval, PricingType } from '../database/price.entity';
+import { PriceService } from '../price/price.service';
 
 @Injectable()
 export class WebhookService {

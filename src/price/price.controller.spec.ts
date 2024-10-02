@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PriceController } from './price.controller';
 import { PriceService } from './price.service';
 import { CheckoutDto } from './dtos/checkout.dto';
-import { UserDetailRequest } from 'src/common/types/userdetail-request.type';
+import { UserDetailRequest } from '../common/types/userdetail-request.type';
 
 
 describe('PriceController', () => {

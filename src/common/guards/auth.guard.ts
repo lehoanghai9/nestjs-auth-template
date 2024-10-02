@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { type UserDetailRequest } from 'src/common/types/userdetail-request.type';
+import { type UserDetailRequest } from '../types/userdetail-request.type';
 import { Observable } from 'rxjs';
 
 @Injectable()

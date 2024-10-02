@@ -5,14 +5,14 @@ import {
    Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PriceEntity } from 'src/database/price.entity';
+import { PriceEntity } from '../database/price.entity';
 import { Repository } from 'typeorm';
 import { PriceDto } from './dtos/price.dto';
-import { ProductEntity } from 'src/database/product.entity';
-import { subscribtionConfigs } from 'src/config/subscribtion.configs';
-import { StripeService } from 'src/stripe/stripe.service';
-import { UserService } from 'src/user/user.service';
-import { CustomerService } from 'src/customer/customer.service';
+import { ProductEntity } from '../database/product.entity';
+import { subscribtionConfigs } from '../config/subscribtion.configs';
+import { StripeService } from '../stripe/stripe.service';
+import { UserService } from '../user/user.service';
+import { CustomerService } from '../customer/customer.service';
 
 @Injectable()
 export class PriceService {

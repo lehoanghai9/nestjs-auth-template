@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
-import { StripeWebhookGuard } from 'src/stripe/stripe-webhook.guard';
+import { StripeWebhookGuard } from '../stripe/stripe-webhook.guard';
 import { bufferToJson } from './utils';
 import Stripe from 'stripe';
 

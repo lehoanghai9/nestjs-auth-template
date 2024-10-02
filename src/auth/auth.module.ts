@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from '../user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshTokenEntity } from 'src/database/refresh-token.entity';
-import { ResetTokenEntity } from 'src/database/reset-token.entity';
-import { MailService } from 'src/services/mail.service';
+import { RefreshTokenEntity } from '../database/refresh-token.entity';
+import { ResetTokenEntity } from '../database/reset-token.entity';
+import { MailService } from '../services/mail.service';
 
 @Module({
    imports: [

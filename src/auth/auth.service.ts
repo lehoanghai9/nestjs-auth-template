@@ -6,21 +6,21 @@ import {
    UnauthorizedException,
 } from '@nestjs/common';
 import { SignupDto } from './dtos/signup.dto';
-import { comparePasswords } from 'src/common/utils/bcrypt';
-import { UserService } from 'src/user/user.service';
+import { comparePasswords } from '../common/utils/bcrypt';
+import { UserService } from '../user/user.service';
 import { LoginDto } from './dtos/login.dto';
-import { WrongCredentialsException } from 'src/common/exceptions/wrong-credentials.exception';
+import { WrongCredentialsException } from '../common/exceptions/wrong-credentials.exception';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RefreshTokenEntity } from 'src/database/refresh-token.entity';
+import { RefreshTokenEntity } from '../database/refresh-token.entity';
 import { MoreThanOrEqual, Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { JWTPayload } from 'src/common/types/userdetail-request.type';
+import { JWTPayload } from '../common/types/userdetail-request.type';
 import { nanoid } from 'nanoid';
-import { ResetTokenEntity } from 'src/database/reset-token.entity';
-import { authConfig } from 'src/config/auth.configs';
-import { MailService } from 'src/services/mail.service';
-import { IMailService } from 'src/services/interfaces/mailservice.interface';
+import { ResetTokenEntity } from '../database/reset-token.entity';
+import { authConfig } from '../config/auth.configs';
+import { MailService } from '../services/mail.service';
+import { IMailService } from '../services/interfaces/mailservice.interface';
 
 @Injectable()
 export class AuthService {

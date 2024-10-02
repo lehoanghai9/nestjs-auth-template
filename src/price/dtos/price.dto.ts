@@ -1,4 +1,4 @@
-import { PricingPlanInterval, PricingType } from "src/database/price.entity";
+import { PricingPlanInterval, PricingType } from "../../database/price.entity";
 
 export class PriceDto {
     id: string;
