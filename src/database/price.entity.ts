@@ -73,7 +73,7 @@ export class PriceEntity {
    @Column('jsonb', { nullable: true })
    metadata?: Record<string, any>;
 
-   @ManyToOne(() => ProductEntity, (product) => product.prices, {})
+   @ManyToOne(() => ProductEntity, (product) => product.prices, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
    @JoinColumn({ name: 'product_id' })
    product: ProductEntity;
 }

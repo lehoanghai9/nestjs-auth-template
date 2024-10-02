@@ -42,6 +42,6 @@ export class ProductEntity {
    @Column('jsonb', { nullable: true })
    metadata?: Record<string, any>;
 
-   @OneToMany(() => PriceEntity, (price) => price.product, { cascade: true })
+   @OneToMany(() => PriceEntity, (price) => price.product, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
    prices?: PriceEntity[];
 }
