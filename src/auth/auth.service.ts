@@ -37,9 +37,9 @@ export class AuthService {
    async signUp(signupData: SignupDto) {
       const { email, password } = signupData;
 
-      const isEmailInUse = await this.userService.findOneByEmail(email);
+      const userWithThisEmail = await this.userService.findOneByEmail(email);
 
-      if (isEmailInUse) {
+      if (userWithThisEmail) {
          //TODO: REMOVE TEXT
          throw new BadRequestException('Email already in use');
       }

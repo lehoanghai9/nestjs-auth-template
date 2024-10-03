@@ -11,7 +11,6 @@ import { PriceDto } from './dtos/price.dto';
 import { ProductEntity } from '../database/product.entity';
 import { subscribtionConfigs } from '../config/subscribtion.configs';
 import { StripeService } from '../stripe/stripe.service';
-import { UserService } from '../user/user.service';
 import { CustomerService } from '../customer/customer.service';
 
 @Injectable()
@@ -21,7 +20,6 @@ export class PriceService {
       @InjectRepository(PriceEntity)
       private readonly productRepository: Repository<PriceEntity>,
       @Inject('STRIPE_SERVICE') private readonly stripeService: StripeService,
-      @Inject('USER_SERVICE') private readonly userService: UserService,
       @Inject('CUSTOMER_SERVICE')
       private readonly customerService: CustomerService,
    ) {}
