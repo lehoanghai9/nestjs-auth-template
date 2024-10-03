@@ -5,7 +5,7 @@ import { StripeConfig } from './config';
 import { StripeException } from './stripe.exception';
 import { calculateTrialEndDate, calculateTrialEndUnixTimestamp } from './utils';
 
-type CustomerDetails = {
+export type CustomerDetails = {
    userId: string;
    email: string;
    name?: string;
@@ -153,8 +153,6 @@ export class StripeService {
          success_url: StripeConfig.defaultSuccessUrl,
       };
 
-      console.log(trialPeriodDays);
-
       if (trialPeriodDays > 0) {
          this.logger.log(
             `Trial end date: ${calculateTrialEndDate(trialPeriodDays).toISOString()}`,
@@ -202,7 +200,7 @@ export class StripeService {
       }
    }
 
-   private async createCustomerId(customerDetails: CustomerDetails) {
+   async createCustomerId(customerDetails: CustomerDetails) {
       this.logger.log(
          `Creating new Stripe customer for user: ${customerDetails.userId}`,
       );
