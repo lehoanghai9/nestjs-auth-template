@@ -1,20 +1,28 @@
 import { ConfigService } from '@nestjs/config';
-import entities from "../database";
+import entities from '../database';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { DataSource } from 'typeorm';
+import { config } from 'dotenv';
+import { resolve } from 'path';
+config();
+const configService = new ConfigService();
 
 const ENTITIES = entities;
-const MIGRATIONS = [__dirname + '/../../migration/*.{ts,js}'];
-
-export function getConfig(config: ConfigService) {
+const MIGRATIONS = [resolve(__dirname + '/../database/migrations/*.{ts,js}')];
+export function getConfig() {
    return {
       type: 'postgres',
-      host: config.get<string>('DB_HOST'),
-      port: config.get<number>('DB_PORT'),
-      username: config.get<string>('DB_USERNAME'),
-      password: config.get<string>('DB_PASSWORD'),
+      host: configService.get<string>('DB_HOST'),
+      port: configService.get<number>('DB_PORT'),
+      username: configService.get<string>('DB_USERNAME'),
+      password: configService.get<string>('DB_PASSWORD'),
       database: 'nest-auth-learn',
       entities: ENTITIES,
-      /* migrations: MIGRATIONS, */
-      synchronize: true,
+      migrations: MIGRATIONS,
+      synchronize: false,
    } as PostgresConnectionOptions;
 }
+
+const AppDataSource = new DataSource(getConfig());
+
+export default AppDataSource;

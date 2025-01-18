@@ -19,8 +19,7 @@ import { getConfig } from './config/db.config';
    imports: [
       ConfigModule.forRoot({ isGlobal: true }),
       TypeOrmModule.forRootAsync({
-         inject: [ConfigService],
-         useFactory: (config: ConfigService) => getConfig(config),
+         useFactory: () => getConfig(),
       }),
       JwtModule.register({
          global: true,
