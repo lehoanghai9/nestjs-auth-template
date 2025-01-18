@@ -31,7 +31,7 @@ export class WebhookService {
       }
 
       try {
-         await this.processEvent(event);
+         await this.processStripeEvent(event);
          this.logger.log(`Successfully processed event: ${event.type}`);
       } catch (error) {
          this.logger.error(
@@ -46,7 +46,7 @@ export class WebhookService {
       return { message: `Webhook received and handled: ${event.type}` };
    }
 
-   private async processEvent(event: Stripe.Event) {
+   private async processStripeEvent(event: Stripe.Event) {
       this.logger.log(`Processing event: ${event.type}`);
 
       switch (event.type) {

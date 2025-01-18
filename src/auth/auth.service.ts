@@ -133,7 +133,6 @@ export class AuthService {
    async forgotPassword(email: string) {
       //Find the user by email
       const user = await this.userService.findOneByEmail(email);
-
       if (user) {
          //If user is found, generate a password reset token
          const expiryDate = new Date();
