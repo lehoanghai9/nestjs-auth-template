@@ -3,7 +3,6 @@ import {
    PrimaryColumn,
    Column,
    ManyToOne,
-   CreateDateColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { PriceEntity } from './price.entity';
@@ -50,9 +49,9 @@ export class SubscriptionEntity {
    cancelAtPeriodEnd?: boolean;
 
    // Time at which the subscription was created.
-   @CreateDateColumn({
-      type: 'timestamptz',
+   @Column('timestamptz', {
       default: () => 'CURRENT_TIMESTAMP',
+      name: 'created_at',
    })
    created: Date;
 

@@ -14,6 +14,7 @@ import { ProductModule } from './product/product.module';
 import { WebhookModule } from './webhook/webhook.module';
 import { CustomerModule } from './customer/customer.module';
 import { getConfig } from './config/db.config';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
    imports: [
@@ -34,6 +35,7 @@ import { getConfig } from './config/db.config';
       ProductModule,
       WebhookModule,
       CustomerModule,
+      SubscriptionModule,
    ],
    controllers: [AppController],
    providers: [AppService],

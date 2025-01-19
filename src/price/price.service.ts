@@ -18,7 +18,7 @@ export class PriceService {
    private readonly logger = new Logger('<>PriceService<>');
    constructor(
       @InjectRepository(PriceEntity)
-      private readonly productRepository: Repository<PriceEntity>,
+      private readonly priceRepository: Repository<PriceEntity>,
       @Inject('STRIPE_SERVICE') private readonly stripeService: StripeService,
       @Inject('CUSTOMER_SERVICE')
       private readonly customerService: CustomerService,
@@ -42,7 +42,7 @@ export class PriceService {
          product,
       };
 
-      return await this.productRepository.upsert(priceData, {
+      return await this.priceRepository.upsert(priceData, {
          conflictPaths: ['id'],
          skipUpdateIfNoValuesChanged: true,
       });
@@ -75,11 +75,15 @@ export class PriceService {
 
    async findPrice(priceId: string) {
       this.logger.log(`Getting price ${priceId}`);
-      return await this.productRepository.findOne({ where: { id: priceId } });
+      const price = await this.priceRepository.findOne({
+         where: { id: priceId },
+      });
+      this.logger.log(`Price ${price ? 'found' : 'not found'}`);
+      return price;
    }
 
    async deletePrice(priceId: string) {
       this.logger.log(`Deleting price ${priceId}`);
-      return await this.productRepository.delete(priceId);
+      return await this.priceRepository.delete(priceId);
    }
 }

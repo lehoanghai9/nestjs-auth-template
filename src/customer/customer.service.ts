@@ -56,13 +56,34 @@ export class CustomerService {
       return stripeCustomerId;
    }
 
+   async findByStripeCustomerId(stripeCustomerId: string) {
+      this.logger.log(
+         `Finding customer by Stripe customer ID: ${stripeCustomerId}`,
+      );
+      const customer = await this.customerRepository.findOne({
+         where: { stripeCustomerId },
+         relations: ['user'],
+      });
+      this.logger.log(
+         `Customer ${customer ? 'found' : 'not found'} for Stripe customer ID: ${stripeCustomerId}`,
+      );
+      return customer;
+   }
+
    private async createOrUpdateCustomerForUser(
       userId: string,
       stripeCustomerId?: string,
    ) {
-      return await this.customerRepository.upsert(
+      this.logger.log(
+         `Creating or updating customer for user ID: ${userId} with Stripe customer ID: ${stripeCustomerId}`,
+      );
+      const result = await this.customerRepository.upsert(
          { stripeCustomerId, user: { id: userId } },
          { conflictPaths: ['user.id'], skipUpdateIfNoValuesChanged: true },
       );
+      this.logger.log(
+         `Customer ${result ? 'created/updated' : 'not created/updated'} for user ID: ${userId}`,
+      );
+      return result;
    }
 }

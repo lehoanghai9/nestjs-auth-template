@@ -11,6 +11,7 @@ import { ProductDto } from '../product/dtos/product.dto';
 import { PriceDto } from '../price/dtos/price.dto';
 import { PricingPlanInterval, PricingType } from '../database/price.entity';
 import { PriceService } from '../price/price.service';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Injectable()
 export class WebhookService {
@@ -20,6 +21,8 @@ export class WebhookService {
       private readonly productService: ProductService,
       @Inject('PRICE_SERVICE')
       private readonly priceService: PriceService,
+      @Inject('SUBSCRIPTION_SERVICE')
+      private readonly subscriptionService: SubscriptionService,
    ) {}
 
    async handleStripeEvent(event: Stripe.Event) {
@@ -75,6 +78,28 @@ export class WebhookService {
             await this.deleteStripeProductEvent(
                event.data.object as Stripe.Product,
             );
+            break;
+         case 'customer.subscription.created':
+         case 'customer.subscription.updated':
+         case 'customer.subscription.deleted':
+            const subscription = event.data.object as Stripe.Subscription;
+            await this.handleStripeSubscriptionEvent(
+               subscription.id,
+               subscription.customer as string,
+               event.type === 'customer.subscription.created',
+            );
+            break;
+         case 'checkout.session.completed':
+            const checkoutSession = event.data
+               .object as Stripe.Checkout.Session;
+            if (checkoutSession.mode === 'subscription') {
+               const subscriptionId = checkoutSession.subscription;
+               await this.handleStripeSubscriptionEvent(
+                  subscriptionId as string,
+                  checkoutSession.customer as string,
+                  true,
+               );
+            }
             break;
          default:
             this.logger.warn(`Unhandled event type: ${event.type}`);
@@ -143,5 +168,19 @@ export class WebhookService {
       this.logger.log(`Deleting product: ${stripeProduct.id}`);
       await this.productService.deleteProduct(stripeProduct.id);
       this.logger.log(`Product deleted: ${stripeProduct.id}`);
+   }
+
+   private async handleStripeSubscriptionEvent(
+      subscribtionId: string,
+      stripeCustomerId: string,
+      isCreate: boolean,
+   ) {
+      this.logger.log(`Handling subscription event`);
+      await this.subscriptionService.manageSubscriptionStatusChange(
+         subscribtionId,
+         stripeCustomerId,
+         isCreate,
+      );
+      this.logger.log(`Subscription event handled`);
    }
 }

@@ -21,6 +21,15 @@ export class UserEntity extends BaseEntity {
    @Column()
    password: string;
 
+   @Column({type: 'jsonb', nullable: true, name: 'billing_address'})
+   billingAddress?: Record<string, any>; 
+
+   @Column({type: 'jsonb', nullable: true, name: 'shipping_address'})
+   shippingAddress?: Record<string, any>;
+
+   @Column({type: 'jsonb', nullable: true, name: 'payment_method'})
+   paymentMethod?: Record<string, any>;
+
    @OneToMany(() => RefreshTokenEntity, (refreshToken) => refreshToken.user, {
       onDelete: 'CASCADE',
    })

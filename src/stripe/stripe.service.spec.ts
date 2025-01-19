@@ -7,6 +7,7 @@ import {
 } from './utils';
 import Stripe from 'stripe';
 import { StripeConfig } from './config';
+import { StripeException } from './stripe.exception';
 
 describe('StripeService', () => {
    let service: StripeService;
@@ -609,4 +610,85 @@ describe('StripeService', () => {
          });
       });
    });
+
+   describe('retrieveSubscription', () => {
+      it('should retrieve a subscription successfully', async () => {
+        const subscriptionId = 'sub_123';
+        const mockSubscription = { id: subscriptionId, default_payment_method: {} } as Stripe.Response<Stripe.Subscription>;
+        jest.spyOn(service, 'retrieveSubscription').mockResolvedValue(mockSubscription);
+  
+        const result = await service.retrieveSubscription(subscriptionId);
+        expect(result).toEqual(mockSubscription);
+      });
+  
+      it('should throw a StripeException when an error occurs', async () => {
+        const subscriptionId = 'sub_123';
+        const mockError = new StripeException('Stripe error');
+        jest.spyOn(service, 'retrieveSubscription').mockRejectedValue(mockError);
+  
+        await expect(service.retrieveSubscription(subscriptionId)).rejects.toThrow(StripeException);
+      });
+    });
+  
+    describe('updateCustomerBillingDetails', () => {
+      it('should update customer billing details successfully', async () => {
+        const paymentMethod = {
+          customer: 'cus_123',
+          billing_details: {
+            name: 'John Doe',
+            phone: '1234567890',
+            address: {
+              line1: '123 Main St',
+              city: 'Anytown',
+              state: 'CA',
+              postal_code: '12345',
+              country: 'US',
+            },
+          },
+        } as Stripe.Response<Stripe.PaymentMethod>;
+
+  
+        const mockCustomer = { id: 'cus_123' } as Stripe.Response<Stripe.Customer>;
+        jest.spyOn(service, 'updateCustomerBillingDetails').mockResolvedValue(mockCustomer);
+  
+        const result = await service.updateCustomerBillingDetails(paymentMethod);
+        expect(result).toEqual(mockCustomer);
+      });
+  
+      it('should log a message and return if billing details are missing', async () => {
+        const paymentMethod = {
+          customer: 'cus_123',
+          billing_details: {
+            name: null,
+            phone: null,
+            address: null,
+          },
+        } as Stripe.PaymentMethod;
+  
+        const result = await service.updateCustomerBillingDetails(paymentMethod);
+        expect(result).toBeUndefined();
+      });
+  
+      it('should throw a StripeException when an error occurs', async () => {
+        const paymentMethod = {
+          customer: 'cus_123',
+          billing_details: {
+            name: 'John Doe',
+            phone: '1234567890',
+            address: {
+              line1: '123 Main St',
+              city: 'Anytown',
+              state: 'CA',
+              postal_code: '12345',
+              country: 'US',
+            },
+          },
+        } as Stripe.PaymentMethod;
+  
+        const mockError = new StripeException('Stripe error');
+        jest.spyOn(service, 'updateCustomerBillingDetails').mockRejectedValue(mockError);
+  
+        await expect(service.updateCustomerBillingDetails(paymentMethod)).rejects.toThrow(StripeException);
+      });
+    });
 });

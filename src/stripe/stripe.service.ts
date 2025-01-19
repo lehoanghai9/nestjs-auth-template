@@ -229,4 +229,52 @@ export class StripeService {
          throw new StripeException(error, 'Error creating Stripe customer');
       }
    }
+
+   async retrieveSubscription(subscriptionId: string) {
+      this.logger.log(`Retrieving subscription with ID: ${subscriptionId}`);
+      try {
+         const subscription = await this.stripe.subscriptions.retrieve(
+            subscriptionId,
+            {
+               expand: ['default_payment_method'],
+            },
+         );
+         this.logger.log(`Retrieved subscription: ${subscription.id}`);
+         return subscription;
+      } catch (error) {
+         this.logger.warn('Error retrieving subscription');
+         throw new StripeException(error, 'Error retrieving subscription');
+      }
+   }
+
+   async updateCustomerBillingDetails(paymentMethod: Stripe.PaymentMethod) {
+      this.logger.log(`Updating customer billing details`);
+      const customer = paymentMethod.customer as string;
+      try {
+         const { name, phone, address } = paymentMethod.billing_details;
+         if (!name || !phone || !address){
+            this.logger.log('Missing billing details');
+            return;
+         }
+
+         const paymentMethodUpdated = await this.stripe.customers.update(
+            customer,
+            {
+               name,
+               phone,
+               address,
+            },
+         );
+         this.logger.log(
+            `Updated customer billing details: ${paymentMethodUpdated.id}`,
+         );
+         return paymentMethodUpdated;
+      } catch (error) {
+         this.logger.warn('Error updating customer billing details');
+         throw new StripeException(
+            error,
+            'Error updating customer billing details',
+         );
+      }
+   }
 }
