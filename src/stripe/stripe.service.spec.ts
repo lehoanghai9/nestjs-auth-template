@@ -691,4 +691,26 @@ describe('StripeService', () => {
         await expect(service.updateCustomerBillingDetails(paymentMethod)).rejects.toThrow(StripeException);
       });
     });
+
+    describe('createPortalSession', () => {
+      it('should create a portal session successfully', async () => {
+        const stripeCustomerId = 'cus_123';
+        const mockSession = { message: 'Portal session created successfully', url: 'https://example.com' };
+        jest.spyOn(service, 'createPortalSession').mockResolvedValue(mockSession);
+  
+        const result = await service.createPortalSession(stripeCustomerId);
+        expect(result).toEqual({
+          message: 'Portal session created successfully',
+          url: mockSession.url,
+        });
+      });
+  
+      it('should throw a StripeException when an error occurs', async () => {
+        const stripeCustomerId = 'cus_123';
+        const mockError = new StripeException("Stripe error");
+        jest.spyOn(service, 'createPortalSession').mockRejectedValue(mockError);
+  
+        await expect(service.createPortalSession(stripeCustomerId)).rejects.toThrow(StripeException);
+      });
+    });
 });

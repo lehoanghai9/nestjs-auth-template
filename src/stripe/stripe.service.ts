@@ -252,7 +252,7 @@ export class StripeService {
       const customer = paymentMethod.customer as string;
       try {
          const { name, phone, address } = paymentMethod.billing_details;
-         if (!name || !phone || !address){
+         if (!name || !phone || !address) {
             this.logger.log('Missing billing details');
             return;
          }
@@ -275,6 +275,23 @@ export class StripeService {
             error,
             'Error updating customer billing details',
          );
+      }
+   }
+
+   async createPortalSession(stripeCustomerId: string) {
+      this.logger.log(
+         `Creating portal session for customer: ${stripeCustomerId}`,
+      );
+      try {
+         const session = await this.stripe.billingPortal.sessions.create({
+            customer: stripeCustomerId,
+            return_url: StripeConfig.defaultSuccessUrl,
+         });
+         this.logger.log(`Created portal session: ${session.id}`);
+         return session.url;
+      } catch (error) {
+         this.logger.warn('Error creating portal session');
+         throw new StripeException(error, 'Error creating portal session');
       }
    }
 }

@@ -8,9 +8,9 @@ import {
 } from '../database/subscription.entity';
 import { StripeService } from '../stripe/stripe.service';
 import { Repository } from 'typeorm';
-import { PriceService } from 'src/price/price.service';
+import { PriceService } from '../price/price.service';
 import Stripe from 'stripe';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class SubscriptionService {
@@ -119,5 +119,32 @@ export class SubscriptionService {
             { ...paymentMethod[paymentMethod.type] },
          );
       }
+   }
+
+   async sendSubscriptionPortalLink(userId: string) {
+      const user = await this.userService.findOneById(userId);
+
+      if (!user || !user.customer) {
+         this.logger.error(`User not found ${userId}, or user is no customer`);
+         throw new NotFoundException(`User not found, or user is no customer`);
+      }
+
+      const stripeCustomerId = await this.stripeService.retrieveCustomerId(
+         user.customer.stripeCustomerId,
+      );
+
+      if(!stripeCustomerId) {
+         this.logger.error(`Stripe customer not found ${user.customer.stripeCustomerId}`);
+         throw new NotFoundException(`Stripe customer not found`);
+      }
+
+      const link = await this.stripeService.createPortalSession(
+         stripeCustomerId,
+      );
+
+      return {
+         message: 'Portal link created successfully',
+         url: link,
+      };
    }
 }

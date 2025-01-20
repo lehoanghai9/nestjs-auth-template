@@ -37,6 +37,7 @@ export class PriceService {
          unit_amount: price.unit_amount ?? null,
          interval: price.interval ?? null,
          interval_count: price.interval_count ?? null,
+         description: price.description ?? null,
          trial_period_days:
             price.trial_period_days ?? subscribtionConfigs.trialPeriodDays,
          product,

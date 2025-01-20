@@ -1,6 +1,8 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller, Inject, Req, UseGuards } from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
 import { Get } from '@nestjs/common';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { UserDetailRequest } from '../common/types/userdetail-request.type';
 
 @Controller('subscription')
 export class SubscriptionController {
@@ -9,9 +11,9 @@ export class SubscriptionController {
       private readonly subscriptionService: SubscriptionService,
    ) {}
 
-   //remove
-  @Get()
-  async Get() {
-    return this.subscriptionService.manageSubscriptionStatusChange("123", 'cus_RbyULrBzizkUEz', true);
-  }
+   @UseGuards(AuthGuard)
+   @Get('/portal')
+   async getPortalLink(@Req() req: UserDetailRequest) {
+      return this.subscriptionService.sendSubscriptionPortalLink(req.userId);
+   }
 }

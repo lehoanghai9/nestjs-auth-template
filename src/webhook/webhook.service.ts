@@ -11,7 +11,7 @@ import { ProductDto } from '../product/dtos/product.dto';
 import { PriceDto } from '../price/dtos/price.dto';
 import { PricingPlanInterval, PricingType } from '../database/price.entity';
 import { PriceService } from '../price/price.service';
-import { SubscriptionService } from 'src/subscription/subscription.service';
+import { SubscriptionService } from '../subscription/subscription.service';
 
 @Injectable()
 export class WebhookService {
@@ -151,6 +151,7 @@ export class WebhookService {
          interval: interval,
          interval_count: stripePrice.recurring?.interval_count ?? null,
          trial_period_days: stripePrice.recurring?.trial_period_days ?? null,
+         description: stripePrice.nickname ?? null,
       };
 
       this.logger.debug(`Upserting price: ${JSON.stringify(priceData)}`);
