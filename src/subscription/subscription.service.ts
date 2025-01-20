@@ -7,7 +7,7 @@ import {
    SubscriptionStatus,
 } from '../database/subscription.entity';
 import { StripeService } from '../stripe/stripe.service';
-import { Repository } from 'typeorm';
+import { In, MoreThanOrEqual, Repository } from 'typeorm';
 import { PriceService } from '../price/price.service';
 import Stripe from 'stripe';
 import { UserService } from '../user/user.service';
@@ -122,6 +122,9 @@ export class SubscriptionService {
    }
 
    async sendSubscriptionPortalLink(userId: string) {
+      this.logger.log(
+         `Starting sendSubscriptionPortalLink for userId: ${userId}`,
+      );
       const user = await this.userService.findOneById(userId);
 
       if (!user || !user.customer) {
@@ -133,18 +136,41 @@ export class SubscriptionService {
          user.customer.stripeCustomerId,
       );
 
-      if(!stripeCustomerId) {
-         this.logger.error(`Stripe customer not found ${user.customer.stripeCustomerId}`);
+      if (!stripeCustomerId) {
+         this.logger.error(
+            `Stripe customer not found ${user.customer.stripeCustomerId}`,
+         );
          throw new NotFoundException(`Stripe customer not found`);
       }
 
-      const link = await this.stripeService.createPortalSession(
-         stripeCustomerId,
-      );
+      const link =
+         await this.stripeService.createPortalSession(stripeCustomerId);
 
+      this.logger.log(`Portal link created successfully for userId: ${userId}`);
       return {
          message: 'Portal link created successfully',
          url: link,
       };
+   }
+
+   async isUserSubscribedToProduct(userId: string, productId: string) {
+      this.logger.log(
+         `Checking if user ${userId} is subscribed to product ${productId}`,
+      );
+
+      const subscription = await this.subscriptionRepository.findOne({
+         where: {
+            user: { id: userId },
+            price: { product: { id: productId } },
+            currentPeriodEnd: MoreThanOrEqual(new Date()),
+            status: In([SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIALING]),
+         },
+      });
+
+      this.logger.log(
+         `User ${userId} is ${subscription ? '' : 'not'} subscribed to product ${productId}`,
+      );
+
+      return subscription ? true : false;
    }
 }

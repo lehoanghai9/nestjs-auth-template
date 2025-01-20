@@ -16,4 +16,10 @@ export class SubscriptionController {
    async getPortalLink(@Req() req: UserDetailRequest) {
       return this.subscriptionService.sendSubscriptionPortalLink(req.userId);
    }
+
+   @UseGuards(AuthGuard)
+   @Get('/status')
+   async getSubscriptionStatus(@Req() req: UserDetailRequest) {
+      return this.subscriptionService.isUserSubscribedToProduct(req.userId, "prod_QuS8xpAeBv58EN");
+   }
 }
