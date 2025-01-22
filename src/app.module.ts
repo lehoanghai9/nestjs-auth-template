@@ -6,7 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { authConfig } from './config/auth.configs';
 import { RolesModule } from './roles/roles.module';
 import { StripeModule } from './stripe/stripe.module';
 import { PriceModule } from './price/price.module';
@@ -27,7 +26,7 @@ import { TypedConfigModule } from './config/config.module';
       JwtModule.register({
          global: true,
          secret: process.env.JWT_SECRET,
-         signOptions: { expiresIn: authConfig.jwtExpiration },
+         signOptions: { expiresIn: process.env.JWT_EXPIRATION || '1h' },
       }),
       AuthModule,
       UserModule,
