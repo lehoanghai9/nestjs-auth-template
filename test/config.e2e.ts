@@ -1,6 +1,5 @@
 import { ConfigService } from '@nestjs/config';
 import { getConfig } from '../src/config/db.config';
-import { DataSource } from 'typeorm';
 import { createDatabase, dropDatabase } from 'typeorm-extension';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { createTestDataSource } from './utils';

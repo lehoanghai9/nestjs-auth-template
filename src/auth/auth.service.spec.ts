@@ -18,7 +18,7 @@ import { comparePasswords } from '../common/utils/bcrypt';
 import { WrongCredentialsException } from '../common/exceptions/wrong-credentials.exception';
 import { nanoid } from 'nanoid';
 import { UserEntity } from '../database';
-import exp from 'constants';
+import { TypedConfigModule } from '../config/config.module';
 
 jest.mock('../common/utils/bcrypt', () => ({
    comparePasswords: jest.fn(),
@@ -74,6 +74,7 @@ describe('AuthService', () => {
                useClass: Repository,
             },
          ],
+         imports: [TypedConfigModule],
       }).compile();
 
       service = module.get<AuthService>(AuthService);

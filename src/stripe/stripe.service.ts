@@ -1,9 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import Stripe from 'stripe';
 import { StripeConfig } from './config';
 import { StripeException } from './stripe.exception';
 import { calculateTrialEndDate, calculateTrialEndUnixTimestamp } from './utils';
+import { TypedConfigService } from '../config/config.service';
 
 export type CustomerDetails = {
    userId: string;
@@ -18,12 +18,13 @@ export class StripeService {
    private readonly logger = new Logger('<>StripeService<>');
    private readonly stripeWebhookSecret: string;
 
-   constructor(private readonly configService: ConfigService) {
-      const stripeSecretKey =
-         this.configService.get<string>('STRIPE_SECRET_KEY');
+   constructor(
+      @Inject(TypedConfigService) readonly configService: TypedConfigService,
+   ) {
+      const stripeSecretKey = this.configService.get('stripe.secret-key');
 
-      this.stripeWebhookSecret = this.configService.get<string>(
-         'STRIPE_WEBHOOK_SECRET',
+      this.stripeWebhookSecret = this.configService.get(
+         'stripe.webhook-secret',
       );
       if (!stripeSecretKey || !this.stripeWebhookSecret) {
          throw new Error('Stripe secret key or webhook secret not found');

@@ -7,7 +7,7 @@ import {
    UnauthorizedException,
 } from '@nestjs/common';
 import { type UserDetailRequest } from '../types/userdetail-request.type';
-import { SubscriptionService } from 'src/subscription/subscription.service';
+import { SubscriptionService } from '../../subscription/subscription.service';
 
 @Injectable()
 export class SubscriptionGuard implements CanActivate {

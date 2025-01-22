@@ -4,6 +4,8 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { resolve } from 'path';
+
+// dont change this file, it is only needed for testing, ORM configuration and commands (migrations, etc.)
 config();
 const configService = new ConfigService();
 

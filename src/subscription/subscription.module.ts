@@ -3,10 +3,10 @@ import { SubscriptionService } from './subscription.service';
 import { SubscriptionController } from './subscription.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubscriptionEntity } from '../database/subscription.entity';
-import { CustomerModule } from 'src/customer/customer.module';
-import { StripeModule } from 'src/stripe/stripe.module';
-import { PriceModule } from 'src/price/price.module';
-import { UserModule } from 'src/user/user.module';
+import { CustomerModule } from '../customer/customer.module';
+import { StripeModule } from '../stripe/stripe.module';
+import { PriceModule } from '../price/price.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
    imports: [

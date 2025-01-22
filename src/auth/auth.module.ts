@@ -6,11 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RefreshTokenEntity } from '../database/refresh-token.entity';
 import { ResetTokenEntity } from '../database/reset-token.entity';
 import { MailService } from '../services/mail.service';
+import { TypedConfigModule } from '../config/config.module';
 
 @Module({
    imports: [
       UserModule,
       TypeOrmModule.forFeature([RefreshTokenEntity, ResetTokenEntity]),
+      TypedConfigModule,
    ],
    controllers: [AuthController],
    providers: [AuthService, MailService],

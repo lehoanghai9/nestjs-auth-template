@@ -4,7 +4,6 @@ import { UserEntity } from '../database/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { encodePassword } from '../common/utils/bcrypt';
-import Stripe from 'stripe';
 
 @Injectable()
 export class UserService {

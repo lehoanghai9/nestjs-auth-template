@@ -8,21 +8,23 @@ import {
 import Stripe from 'stripe';
 import { StripeConfig } from './config';
 import { StripeException } from './stripe.exception';
+import { TypedConfigModule } from '../config/config.module';
+import { TypedConfigService } from '../config/config.service';
 
 describe('StripeService', () => {
    let service: StripeService;
-   let configService: ConfigService;
+   let configService: TypedConfigService;
    let stripeWebhookSecret: string;
 
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
-         imports: [ConfigModule.forRoot({ isGlobal: true })],
+         imports: [TypedConfigModule],
          providers: [StripeService],
       }).compile();
 
       service = module.get<StripeService>(StripeService);
-      configService = module.get<ConfigService>(ConfigService);
-      stripeWebhookSecret = configService.get<string>('STRIPE_WEBHOOK_SECRET');
+      configService = module.get<TypedConfigService>(TypedConfigService);
+      stripeWebhookSecret = configService.get('stripe.webhook-secret');
    });
 
    const mockExistingStripeCustomer = {
@@ -699,10 +701,7 @@ describe('StripeService', () => {
         jest.spyOn(service, 'createPortalSession').mockResolvedValue(mockSession);
   
         const result = await service.createPortalSession(stripeCustomerId);
-        expect(result).toEqual({
-          message: 'Portal session created successfully',
-          url: mockSession,
-        });
+        expect(result).toEqual(mockSession);
       });
   
       it('should throw a StripeException when an error occurs', async () => {

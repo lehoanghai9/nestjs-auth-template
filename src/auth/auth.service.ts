@@ -18,9 +18,9 @@ import { v4 as uuid } from 'uuid';
 import { JWTPayload } from '../common/types/userdetail-request.type';
 import { nanoid } from 'nanoid';
 import { ResetTokenEntity } from '../database/reset-token.entity';
-import { authConfig } from '../config/auth.configs';
 import { MailService } from '../services/mail.service';
 import { IMailService } from '../services/interfaces/mailservice.interface';
+import { TypedConfigService } from '../config/config.service';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +28,8 @@ export class AuthService {
       @Inject('USER_SERVICE') private readonly userService: UserService,
       @Inject(JwtService) private readonly jwtService: JwtService,
       @Inject(MailService) private readonly mailService: IMailService,
+      @Inject(TypedConfigService)
+      private readonly configService: TypedConfigService,
       @InjectRepository(RefreshTokenEntity)
       private refreshTokenRepository: Repository<RefreshTokenEntity>,
       @InjectRepository(ResetTokenEntity)
@@ -137,7 +139,7 @@ export class AuthService {
          //If user is found, generate a password reset token
          const expiryDate = new Date();
          expiryDate.setHours(
-            expiryDate.getHours() + authConfig.resetTokenExpiryHours,
+            expiryDate.getHours() + this.configService.get("auth.reset-token-expiry-hours"),
          );
 
          const resetToken = nanoid(64);
@@ -199,7 +201,7 @@ export class AuthService {
 
    private async storeRefreshToken(refreshToken: string, userId: string) {
       //Calculates expiry date from x days from now on
-      const expiresInDays = authConfig.refreshTokenExpirationDays;
+      const expiresInDays = this.configService.get("auth.refresh-token-expiration-days");
       const expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + expiresInDays);
 

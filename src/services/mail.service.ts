@@ -1,19 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { type IMailService } from './interfaces/mailservice.interface';
-import { ConfigService } from '@nestjs/config';
+import { TypedConfigService } from '../config/config.service';
 
 @Injectable()
 export class MailService implements IMailService {
    private transporter: nodemailer.Transporter;
 
-   constructor(private readonly configService: ConfigService) {
+   constructor(
+      @Inject(TypedConfigService) readonly configService: TypedConfigService,
+   ) {
       this.transporter = nodemailer.createTransport({
-         host: this.configService.get<string>('EMAIL_HOST'),
-         port: this.configService.get<number>('EMAIL_PORT'),
+         host: this.configService.get('mail.host'),
+         port: this.configService.get('mail.port'),
          auth: {
-            user: this.configService.get<string>('EMAIL_USER'),
-            pass: this.configService.get<string>('EMAIL_PASSWORD'),
+            user: this.configService.get('mail.user'),
+            pass: this.configService.get('mail.pass'),
          },
       });
    }
