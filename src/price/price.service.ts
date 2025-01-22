@@ -9,9 +9,9 @@ import { PriceEntity } from '../database/price.entity';
 import { Repository } from 'typeorm';
 import { PriceDto } from './dtos/price.dto';
 import { ProductEntity } from '../database/product.entity';
-import { subscribtionConfigs } from '../config/subscribtion.configs';
 import { StripeService } from '../stripe/stripe.service';
 import { CustomerService } from '../customer/customer.service';
+import { TypedConfigService } from '../config/config.service';
 
 @Injectable()
 export class PriceService {
@@ -20,6 +20,7 @@ export class PriceService {
       @InjectRepository(PriceEntity)
       private readonly priceRepository: Repository<PriceEntity>,
       @Inject('STRIPE_SERVICE') private readonly stripeService: StripeService,
+      @Inject(TypedConfigService) private readonly configService: TypedConfigService,
       @Inject('CUSTOMER_SERVICE')
       private readonly customerService: CustomerService,
    ) {}
@@ -39,7 +40,7 @@ export class PriceService {
          interval_count: price.interval_count ?? null,
          description: price.description ?? null,
          trial_period_days:
-            price.trial_period_days ?? subscribtionConfigs.trialPeriodDays,
+            price.trial_period_days ?? this.configService.get('subscription.trial-period-days'),
          product,
       };
 

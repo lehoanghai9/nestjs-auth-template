@@ -6,6 +6,7 @@ import { PriceEntity } from '../database/price.entity';
 import { StripeModule } from '../stripe/stripe.module';
 import { UserModule } from '../user/user.module';
 import { CustomerModule } from '../customer/customer.module';
+import { TypedConfigModule } from '../config/config.module';
 
 @Module({
    imports: [
@@ -13,6 +14,7 @@ import { CustomerModule } from '../customer/customer.module';
       StripeModule,
       UserModule,
       CustomerModule,
+      TypedConfigModule
    ],
    controllers: [PriceController],
    providers: [{ useClass: PriceService, provide: 'PRICE_SERVICE' }],
