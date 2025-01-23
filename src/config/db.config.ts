@@ -18,7 +18,7 @@ export function getConfig() {
       port: configService.get<number>('DB_PORT'),
       username: configService.get<string>('DB_USERNAME'),
       password: configService.get<string>('DB_PASSWORD'),
-      database: 'nest-auth-learn',
+      database: configService.get<string>('DB_NAME'),
       entities: ENTITIES,
       migrations: MIGRATIONS,
       synchronize: false,

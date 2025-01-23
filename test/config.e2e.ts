@@ -6,7 +6,7 @@ import { createTestDataSource } from './utils';
 
 export class TestDBInitiator {
    private readonly initialDatabase: string;
-   private readonly testDatabase = 'nest-auth-learn-test';
+   private readonly testDatabase = 'TESTING_DB';
    readonly dbOptions: PostgresConnectionOptions;
    readonly configService: ConfigService;
 
